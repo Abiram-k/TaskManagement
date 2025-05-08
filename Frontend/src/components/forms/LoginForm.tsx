@@ -17,6 +17,8 @@ import {
 } from "@/validationSchema/LoginSchema";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { Link } from "react-router-dom";
+import { useLogin } from "@/hooks/useLogin";
+import Spinner from "../ui/Spinner";
 
 export function LoginForm({
   className,
@@ -29,9 +31,10 @@ export function LoginForm({
   } = useForm<loginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
+  const { mutate, isPending } = useLogin();
 
   const onSubmit = (data: loginSchemaType) => {
-    console.log("Login Data:", data);
+    mutate(data);
   };
 
   return (
@@ -66,6 +69,7 @@ export function LoginForm({
                   <Input
                     id="password"
                     type="password"
+                    placeholder="Enter you password"
                     {...register("password")}
                   />
                   {errors.password && (
@@ -84,7 +88,7 @@ export function LoginForm({
                 to="/auth/register"
                 className="underline underline-offset-4"
               >
-                Sign up
+                {isPending ? "Please wait ..." : "Sign up"}
               </Link>
             </div>
           </form>

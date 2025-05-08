@@ -11,13 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type loginSchemaType } from "@/validationSchema/LoginSchema";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import {
   registerSchema,
   type registerSchemaType,
 } from "@/validationSchema/registerSchema";
 import { Link } from "react-router-dom";
+import { useRegister } from "@/hooks/useRegister";
 
 export function RegisterForm({
   className,
@@ -30,9 +30,10 @@ export function RegisterForm({
   } = useForm<registerSchemaType>({
     resolver: zodResolver(registerSchema),
   });
+  const { mutate, isPending } = useRegister();
 
   const onSubmit = (data: registerSchemaType) => {
-    console.log("Register Data:", data);
+    mutate(data);
   };
 
   return (
@@ -77,37 +78,37 @@ export function RegisterForm({
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-<div>
-
-                <Input
-                  id="password"
-                  type="password"
-                  {...register("password")}
+                <div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Enter you password"
+                    {...register("password")}
                   />
-                {errors.password && (
+                  {errors.password && (
                     <ErrorMessage message={String(errors.password.message)} />
-                )}
+                  )}
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <div>
-
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  {...register("confirmPassword")}
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    {...register("confirmPassword")}
                   />
-                {errors.confirmPassword && (
+                  {errors.confirmPassword && (
                     <ErrorMessage
-                    message={String(errors.confirmPassword.message)}
+                      message={String(errors.confirmPassword.message)}
                     />
-                )}
+                  )}
                 </div>
               </div>
 
               <Button type="submit" className="w-full">
-                Sign up
+                {isPending ? "Registering ..." : "Sign up"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

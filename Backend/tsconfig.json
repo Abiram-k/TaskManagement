@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",           // Ensure ESNext module system
+    "target": "ESNext",           // Set the target to ESNext for compatibility with ESM
+    "moduleResolution": "node",   // Use node module resolution
+    "esModuleInterop": true,      // Allow default imports from CommonJS modules
+    "outDir": "./dist",           // Output directory for compiled files
+    "skipLibCheck": true,         // Skip library checks for better performance
+    "strict": true,               // Enable strict type checking
+    "allowJs": true               // Allow JavaScript files (if needed)
+  },
+  "include": [
+    "src/**/*.ts"                 // Include TypeScript files in the src directory
+  ]
+}
