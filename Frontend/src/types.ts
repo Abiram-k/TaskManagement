@@ -13,3 +13,15 @@ export interface IRegister {
   firstName: string;
   password: string;
 }
+
+export type taskStatus = "pending" | "completed" | "overdue"
+
+export type Task = {
+  taskId: string;
+  title: string;
+  description: string;
+  dueDate: Date;
+  status: "pending" | "completed" | "overdue";
+  priority: "low" | "medium" | "high";
+  createdAt: Date;
+};

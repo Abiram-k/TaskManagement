@@ -17,7 +17,7 @@ import {
 } from "@/validationSchema/LoginSchema";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { Link } from "react-router-dom";
-import { useLogin } from "@/hooks/useLogin";
+import { useLogin } from "@/hooks/auth/useLogin";
 import Spinner from "../ui/Spinner";
 
 export function LoginForm({
