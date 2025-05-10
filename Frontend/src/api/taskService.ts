@@ -15,7 +15,6 @@ export class TaskService {
     return this._httpService.get("/tasks");
   }
   async addTask(data: Task): Promise<axiosResponse> {
-    alert("hello");
     return this._httpService.post("/task", data);
   }
   async updateTask(taskId: string, data: Task): Promise<axiosResponse> {

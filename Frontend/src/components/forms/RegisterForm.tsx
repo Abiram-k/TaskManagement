@@ -18,6 +18,8 @@ import {
 } from "@/validationSchema/registerSchema";
 import { Link } from "react-router-dom";
 import { useRegister } from "@/hooks/auth/useRegister";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 export function RegisterForm({
   className,
@@ -30,12 +32,17 @@ export function RegisterForm({
   } = useForm<registerSchemaType>({
     resolver: zodResolver(registerSchema),
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { mutate, isPending } = useRegister();
 
   const onSubmit = (data: registerSchemaType) => {
     mutate(data);
   };
-
+  const togglePassword = () => setShowPassword(!showPassword);
+  const toggleConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -78,27 +85,49 @@ export function RegisterForm({
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <div>
+                <div className="relative">
                   <Input
                     id="password"
-                    type="password"
-                    placeholder="Enter you password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className=""
                     {...register("password")}
                   />
+                  <button
+                    type="button"
+                    onClick={togglePassword}
+                    className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
                   {errors.password && (
                     <ErrorMessage message={String(errors.password.message)} />
                   )}
                 </div>
               </div>
+
+              {/* Confirm Password field */}
               <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <div>
+                <div className="relative">
                   <Input
                     id="confirmPassword"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
+                    className=""
                     {...register("confirmPassword")}
                   />
+                  <button
+                    type="button"
+                    onClick={toggleConfirmPassword}
+                    className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff size={20} />
+                    ) : (
+                      <Eye size={20} />
+                    )}
+                  </button>
                   {errors.confirmPassword && (
                     <ErrorMessage
                       message={String(errors.confirmPassword.message)}

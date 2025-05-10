@@ -18,7 +18,6 @@ const userSchema = new Schema<IUser>({
   tasks: {
     type: [
       {
-        taskId: { type: String, required: true },
         title: { type: String, required: true },
         description: { type: String, required: true },
         dueDate: { type: Date, required: true },

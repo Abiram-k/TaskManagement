@@ -1,6 +1,7 @@
 import { HttpStatusCode } from "../constants";
 import { ITaskService } from "../interface/service/task.service.interface";
 import { UserRepository } from "../repository/user.repository";
+import { getIO, getSocketIdByUserId } from "../utils/socket";
 import { Task, taskStatus } from "../types";
 import createHttpError from "http-errors";
 
@@ -47,9 +48,8 @@ export class TaskService implements ITaskService {
       if (!user.tasks.length) {
         return null;
       }
-      const tasks = user.tasks.find((task) => task.taskId == taskId);
+      const tasks = user.tasks.find((task) => task._id == taskId);
       return tasks ? tasks : null;
-      
     } catch (error) {
       throw error;
     }
@@ -63,13 +63,29 @@ export class TaskService implements ITaskService {
           "User id not fouded"
         );
       }
-      await this._userRepo.addTask(userId, data);
+      const io = getIO();
+      const socketId = getSocketIdByUserId(userId);
+      if (!socketId) {
+        console.log("Failed to find socked id");
+        throw createHttpError(
+          HttpStatusCode.NOT_FOUND,
+          "Socket id not founded"
+        );
+      }
+      const task: Task[] | null = await this._userRepo.addTask(userId, data);
+      if (!task) {
+        throw createHttpError(
+          HttpStatusCode.NOT_IMPLEMENTED,
+          "Failed to add task"
+        );
+      }
+      io.to(socketId).emit("task_updated", task);
     } catch (error) {
       throw error;
     }
   }
 
-  async updateTask(userId: string, data: Task): Promise<void> {
+  async updateTask(userId: string, taskId: string, data: Task): Promise<void> {
     try {
       if (!userId) {
         throw createHttpError(
@@ -77,7 +93,23 @@ export class TaskService implements ITaskService {
           "User id not fouded"
         );
       }
-      await this._userRepo.updateTask(userId, data);
+      const io = getIO();
+      const socketId = getSocketIdByUserId(userId);
+      if (!socketId) {
+        console.log("Failed to find socked id");
+        throw createHttpError(
+          HttpStatusCode.NOT_FOUND,
+          "Socket id not founded"
+        );
+      }
+      const task: Task[] | null = await this._userRepo.updateTask(userId, data);
+      if (!task) {
+        throw createHttpError(
+          HttpStatusCode.NOT_IMPLEMENTED,
+          "Failed to update task"
+        );
+      }
+      io.to(socketId).emit("task_updated", task);
     } catch (error) {
       throw error;
     }
@@ -95,7 +127,27 @@ export class TaskService implements ITaskService {
           "User id not fouded"
         );
       }
-      await this._userRepo.toggleStatus(userId, taskId, status);
+      const io = getIO();
+      const socketId = getSocketIdByUserId(userId);
+      if (!socketId) {
+        console.log("Failed to find socked id");
+        throw createHttpError(
+          HttpStatusCode.NOT_FOUND,
+          "Socket id not founded"
+        );
+      }
+      const task: Task[] | null = await this._userRepo.toggleStatus(
+        userId,
+        taskId,
+        status
+      );
+      if (!task) {
+        throw createHttpError(
+          HttpStatusCode.NOT_IMPLEMENTED,
+          "Failed to update status"
+        );
+      }
+      io.to(socketId).emit("task_updated", task);
     } catch (error) {
       throw error;
     }
@@ -109,7 +161,27 @@ export class TaskService implements ITaskService {
           "User id not fouded"
         );
       }
-      await this._userRepo.deleteTask(userId, taskId);
+      const io = getIO();
+      const socketId = getSocketIdByUserId(userId);
+      if (!socketId) {
+        console.log("Failed to find socked id");
+        throw createHttpError(
+          HttpStatusCode.NOT_FOUND,
+          "Socket id not founded"
+        );
+      }
+      const task: Task[] | null = await this._userRepo.deleteTask(
+        userId,
+        taskId
+      );
+
+      if (!task) {
+        throw createHttpError(
+          HttpStatusCode.NOT_IMPLEMENTED,
+          "Failed to delete task"
+        );
+      }
+      io.to(socketId).emit("task_updated", task);
     } catch (error) {
       throw error;
     }

@@ -1,23 +1,23 @@
 import { AuthService } from "@/api/authService";
 import { HttpService } from "@/api/httpService";
-import type { axiosResponse, ILogin } from "@/types";
+import type { ILogin } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export const useLogin = () => {
+export const useLogout = () => {
   const httpService = new HttpService();
   const authService = new AuthService(httpService);
   const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: (data: ILogin) => authService.login("/auth/login", data),
-    onSuccess: (data) => {
-      localStorage.setItem("accessToken", data.accessToken);
-      console.log("Res Login Data: ", data);
-      navigate("/");
+    mutationFn: () => authService.logout("/auth/logout"),
+    onSuccess: () => {
+      localStorage.removeItem("accessToken");
+      navigate("/auth/login");
+      toast.success("Logout out");
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to login, Try again");
+      toast.error(error.message || "Failed to logout, Try again");
     },
   });
 

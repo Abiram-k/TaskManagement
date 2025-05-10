@@ -18,7 +18,6 @@ export class TaskController implements ITaskController {
   ): Promise<void> {
     try {
       const { userId } = req.user as { userId: string };
-      console.log("From add task controller", req.user);
       const tasks: Task[] = await this._taskService.getAllTasks(userId);
       res.status(HttpStatusCode.OK).json({
         message: "Successfully fetched all tasks",
@@ -56,7 +55,6 @@ export class TaskController implements ITaskController {
   ): Promise<void> {
     try {
       const { userId } = req.user as { userId: string };
-      console.log("From add Task: :", req.body);
       await this._taskService.addTask(userId, req.body);
       res.status(HttpStatusCode.OK).json({
         message: "Successfully added tasks",
@@ -75,7 +73,6 @@ export class TaskController implements ITaskController {
     try {
       const { userId } = req.user as { userId: string };
       const { taskId } = req.params;
-      console.log("From update task controller, taskId: ", taskId, req.body);
       await this._taskService.updateTask(userId, taskId, req.body as Task);
       res.status(HttpStatusCode.OK).json({
         message: "Successfully updated tasks",
@@ -100,11 +97,7 @@ export class TaskController implements ITaskController {
       }
 
       await this._taskService.toggleStatus(userId, taskId, status);
-      console.log(
-        "From toggle task controller, taskId, status",
-        taskId,
-        status
-      );
+
       res.status(HttpStatusCode.OK).json({
         message: "Successfully toggled task status",
         success: true,
@@ -122,7 +115,6 @@ export class TaskController implements ITaskController {
     try {
       const { userId } = req.user as { userId: string };
       const { taskId } = req.query;
-      console.log("From delete task controller, taskId: ", taskId);
       await this._taskService.deleteTask(userId, taskId as string);
       res.status(HttpStatusCode.OK).json({
         message: "Successfully deleted tasks",

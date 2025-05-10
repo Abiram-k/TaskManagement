@@ -17,14 +17,16 @@ export const authenticate = (
     console.log("No token founded , in jwt middleware");
     return;
   }
-  console.log("💫 Access Token From Auth Middleware: ", token);
-  
+
   jwt.verify(
     token,
     process.env.ACCESS_TOKEN_SECRET!,
     (err: any, decoded: any) => {
       if (err) {
-        return res.status(403).json({ message: "Invalid or expired token" });
+        console.log("Invalid or expired token");
+        return res
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "Invalid or expired token" }) ;
       }
       req.user = decoded;
       next();

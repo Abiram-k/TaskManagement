@@ -7,10 +7,13 @@ export class AuthService {
     this.httpService = httpService;
   }
 
-  async login(url: string, data: ILogin): Promise<axiosResponse> {
+  async login(url: string, data: ILogin): Promise<{ accessToken: string }> {
     return this.httpService.post(url, data);
   }
-  async register(url:string,data:IRegister):Promise<axiosResponse> {
-    return this.httpService.post(url,data);
+  async register(url: string, data: IRegister): Promise<axiosResponse> {
+    return this.httpService.post(url, data);
+  }
+  async logout(url: string): Promise<axiosResponse> {
+    return this.httpService.post(url, {});
   }
 }

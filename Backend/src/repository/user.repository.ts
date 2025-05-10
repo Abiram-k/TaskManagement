@@ -26,22 +26,40 @@ export class UserRepository implements IUserRepository<IUser> {
     }
   }
 
-  async addTask(userId: string, data: Task): Promise<void> {
+  async findUserHavingOverDue(): Promise<IUser[]> {
     try {
-      await User.findByIdAndUpdate(
-        userId,
-        { $push: { tasks: data } },
-        { new: true, useFindAndModify: false }
-      );
+      const now = new Date();
+      return await User.find({
+        tasks: {
+          $elemMatch: {
+            dueDate: { $lt: now },
+            status: "pending",
+          },
+        },
+      });
     } catch (error) {
       throw error;
     }
   }
 
-  async updateTask(userId: string, data: Task): Promise<void> {
+  async addTask(userId: string, data: Task): Promise<Task[] | null> {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $push: { tasks: data } },
+        { new: true }
+      );
+      if (!updatedUser) return null;
+      return updatedUser.tasks;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateTask(userId: string, data: Task): Promise<Task[] | null> {
     try {
       await User.updateOne(
-        { _id: userId, "tasks.taskId": data.taskId },
+        { _id: userId, "tasks._id": data._id },
         {
           $set: {
             "tasks.$.title": data.title,
@@ -52,6 +70,9 @@ export class UserRepository implements IUserRepository<IUser> {
           },
         }
       );
+
+      const user = await User.findById(userId).select("tasks");
+      return user?.tasks ?? null;
     } catch (error) {
       throw error;
     }
@@ -61,26 +82,32 @@ export class UserRepository implements IUserRepository<IUser> {
     userId: string,
     taskId: string,
     status: taskStatus
-  ): Promise<void> {
+  ): Promise<Task[] | null> {
     try {
       await User.updateOne(
-        { _id: userId, "tasks.taskId": taskId },
+        { _id: userId, "tasks._id": taskId },
         {
           $set: {
             "tasks.$.status": status,
           },
         }
       );
+
+      const user = await User.findById(userId).select("tasks");
+      return user?.tasks ?? null;
     } catch (error) {
       throw error;
     }
   }
 
-  async deleteTask(userId: string, taskId: string): Promise<void> {
+  async deleteTask(userId: string, taskId: string): Promise<Task[] | null> {
     try {
       await User.findByIdAndUpdate(userId, {
-        $pull: { tasks: { taskId } },
+        $pull: { tasks: { _id: taskId } },
       });
+
+      const user = await User.findById(userId).select("tasks");
+      return user?.tasks ?? null;
     } catch (error) {
       throw error;
     }

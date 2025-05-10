@@ -1,64 +1,64 @@
-import { useState, useEffect } from "react";
-import { PlusCircle } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { LogOut, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TaskList from "@/components/task/taskList";
 import TaskForm from "@/components/task/taskForm";
 import TaskChart from "@/components/task/taskChart";
-import type { Task } from "@/types";
+import type { axiosResponse, Task } from "@/types";
 import { useGetAllTasks } from "@/hooks/task/useGetAllTasks";
 import Spinner from "../ui/Spinner";
 import { useAddTask } from "@/hooks/task/useAddTask";
 import { useUpdateTask } from "@/hooks/task/useUpdateTask";
 import { useDeleteTask } from "@/hooks/task/useDeleteTask";
 import { useToggleStatusTask } from "@/hooks/task/useToggleStatus";
+import { useLogout } from "@/hooks/auth/useLogout";
+import { toast } from "sonner";
+import { createSocket } from "@/utils/createSocket";
 
 export default function TaskManagement() {
   const [tasks, setTasks] = useState<Task[]>([]);
-
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [activeTab, setActiveTab] = useState("all");
+  const socketRef = useRef<any>(null);
 
   const { data: tasksData, isPending: tasksIsPending } = useGetAllTasks();
-  console.log("All task data: ", tasksData);
   const { mutate: addTaskMutate, isPending: addingTask } = useAddTask();
   const { mutate: updateTaskMutate, isPending: updatingTask } = useUpdateTask();
   const { mutate: deleteTaskMutate, isPending: deletingTask } = useDeleteTask();
   const { mutate: toggleStatusMutate, isPending: statusUpdating } =
     useToggleStatusTask();
+  const { mutate: logoutMutate, isPending: loggingOut } = useLogout();
 
   useEffect(() => {
     if (tasksData?.tasks) setTasks(tasksData.tasks);
   }, [tasksData?.tasks]);
 
-  // Check for overdue tasks every minute
   useEffect(() => {
-    checkOverdueTasks();
-    const interval = setInterval(() => {
-      checkOverdueTasks();
-    }, 60000);
-    return () => clearInterval(interval);
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      toast.warning("Session expired, please login again.");
+      return;
+    }
+    const socket = createSocket(token);
+    socketRef.current = socket;
+    socket.on("connect", () => {
+      toast.success("User connected");
+    });
+    socket.on("task_updated", (task: Task[]) => {
+      setTasks(task);
+    });
+    socket.on("connect_error", (err: Error) => {
+      console.error("Socket connection error:", err.message);
+    });
+
+    return () => {
+      socket.off("task_updated");
+      socket.disconnect();
+    };
   }, []);
-
-  // useEffect(() => {
-  //   checkOverdueTasks(); // Recheck immediately when tasks change
-  // }, [tasks]);
-
-  const checkOverdueTasks = () => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (
-          task.status !== "completed" &&
-          new Date(task.dueDate) < new Date()
-        ) {
-          return { ...task, status: "overdue" };
-        }
-        return task;
-      })
-    );
-  };
 
   const handleAddTask = (task: Task) => {
     addTaskMutate(task);
@@ -66,22 +66,22 @@ export default function TaskManagement() {
       ...tasks,
       {
         ...task,
-        taskId: Date.now().toString(),
+        _id: Date.now().toString(),
         createdAt: new Date(),
       },
     ]);
-    // setIsAddingTask(false);
+    setIsAddingTask(false);
   };
 
   const handleUpdateTask = (task: Task) => {
-    updateTaskMutate({ taskId: task.taskId, data: task });
-    setTasks(tasks.map((t) => (t.taskId === task.taskId ? task : t)));
+    updateTaskMutate({ taskId: task._id, data: task });
+    setTasks(tasks.map((t) => (t._id === task._id ? task : t)));
     setEditingTask(null);
   };
 
   const handleDeleteTask = (taskId: string) => {
     deleteTaskMutate(taskId);
-    setTasks(tasks.filter((task) => task.taskId !== taskId));
+    setTasks(tasks.filter((task) => task._id !== taskId));
   };
 
   const handleEditTask = (task: Task) => {
@@ -89,8 +89,13 @@ export default function TaskManagement() {
   };
 
   const handleStatusChange = (task: Task) => {
-    toggleStatusMutate({ taskId: task.taskId, status: task.status });
-    setTasks(tasks.map((t) => (t.taskId === task.taskId ? task : t)));
+    console.log("From handleStatusChange: ", task);
+    toggleStatusMutate({ taskId: task._id, status: task.status });
+    setTasks(tasks.map((t) => (t._id === task._id ? task : t)));
+  };
+
+  const handleLogout = () => {
+    logoutMutate();
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -100,7 +105,12 @@ export default function TaskManagement() {
 
   return (
     <div className="space-y-6">
-      {/* {(tasksIsPending || addingTask || updatingTask || deletingTask || statusUpdating) && <Spinner />} */}
+      {(tasksIsPending ||
+        loggingOut ||
+        addingTask ||
+        updatingTask ||
+        deletingTask ||
+        statusUpdating) && <Spinner />}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Task Management</h1>
@@ -113,10 +123,17 @@ export default function TaskManagement() {
             setIsAddingTask(true);
             setEditingTask(null);
           }}
-          className="flex items-center gap-2"
+          className="flex bg-green-500 shadow-md text-white hover:bg-green-600 items-center gap-2"
         >
           <PlusCircle className="h-4 w-4" />
           Add New Task
+        </Button>
+        <Button
+          onClick={handleLogout}
+          className="bg-red-500 shadow-md text-white hover:bg-red-600 flex items-center gap-2"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
         </Button>
       </div>
 

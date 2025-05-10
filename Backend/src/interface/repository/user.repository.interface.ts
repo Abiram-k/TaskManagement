@@ -4,12 +4,13 @@ export interface IUserRepository<T> {
   create(data: IRegister): Promise<void>;
   findByEmail(email: string): Promise<T | null>;
   findById(id: string): Promise<T | null>;
-  addTask(userId: string, data: Task): Promise<void>;
-  updateTask(userId: string, data: Task): Promise<void>;
-  deleteTask(userId: string, taskId: string): Promise<void>;
+  addTask(userId: string, data: Task): Promise<Task[] | null>;
+  updateTask(userId: string, data: Task): Promise<Task[] | null>;
+  deleteTask(userId: string, taskId: string): Promise<Task[] | null>;
   toggleStatus(
     userId: string,
     taskId: string,
     status: taskStatus
-  ): Promise<void>;
+  ): Promise<Task[] | null>;
+  findUserHavingOverDue(): Promise<T[]>;
 }

@@ -41,9 +41,10 @@ export interface AuthRequest extends Request {
   };
 }
 
-export type taskStatus = "pending" | "completed" | "overdue"
+export type taskStatus = "pending" | "completed" | "overdue";
+
 export type Task = {
-  taskId: string;
+  _id: string;
   title: string;
   description: string;
   dueDate: Date;

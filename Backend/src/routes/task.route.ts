@@ -8,9 +8,9 @@ router.get(
   "/task/:taskId",
   taskController.getSelectedTask.bind(taskController)
 );
-router.put("/task", taskController.updateTask.bind(taskController));
+router.put("/task/:taskId", taskController.updateTask.bind(taskController));
 router.post("/task", taskController.addTask.bind(taskController));
 router.delete("/task", taskController.deleteTask.bind(taskController));
-router.patch("/task", taskController.toggleStatus.bind(taskController));
+router.patch("/task/:taskId", taskController.toggleStatus.bind(taskController));
 
 export default router;

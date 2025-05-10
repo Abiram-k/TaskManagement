@@ -38,7 +38,6 @@ export class AuthController implements IAuthController {
     next: NextFunction
   ): Promise<void> {
     try {
-      console.log("From register controller: ", req.body);
       const { email, firstName, password }: IRegister = req.body;
       await this._authService.register({ email, firstName, password });
       res
@@ -81,6 +80,27 @@ export class AuthController implements IAuthController {
           res.status(HttpStatusCode.CREATED).json({ accessToken });
         }
       );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const refreshToken = req.cookies?.refreshToken;
+
+      if (refreshToken) {
+        res.clearCookie("refreshToken", {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+        });
+      }
+
+      res.status(HttpStatusCode.OK).json({
+        message: "Successfully logged out",
+        success: true,
+      });
     } catch (error) {
       next(error);
     }
