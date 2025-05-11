@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TaskList from "@/components/task/taskList";
 import TaskForm from "@/components/task/taskForm";
 import TaskChart from "@/components/task/taskChart";
-import type { axiosResponse, Task } from "@/types";
+import type { Task } from "@/types";
 import { useGetAllTasks } from "@/hooks/task/useGetAllTasks";
 import Spinner from "../ui/Spinner";
 import { useAddTask } from "@/hooks/task/useAddTask";
@@ -137,8 +137,8 @@ export default function TaskManagement() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 ">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+        <div className="lg:col-span-2">
           <Card>
             <CardHeader className="pb-3">
               <CardTitle>Tasks</CardTitle>

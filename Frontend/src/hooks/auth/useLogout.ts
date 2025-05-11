@@ -1,6 +1,5 @@
 import { AuthService } from "@/api/authService";
 import { HttpService } from "@/api/httpService";
-import type { ILogin } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";

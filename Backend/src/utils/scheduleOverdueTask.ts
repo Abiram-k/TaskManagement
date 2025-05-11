@@ -4,7 +4,7 @@ import { UserRepository } from "../repository/user.repository";
 import { IUser } from "../types";
 
 const userRepository: IUserRepository<IUser> = new UserRepository();
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   try {
     const users = await userRepository.findUserHavingOverDue();
     const todayStart = new Date();

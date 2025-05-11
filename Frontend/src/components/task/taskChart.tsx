@@ -65,7 +65,7 @@ export default function TaskChart({ tasks }: TaskChartProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       <div className="grid grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4 flex flex-col items-center justify-center">
@@ -101,7 +101,7 @@ export default function TaskChart({ tasks }: TaskChartProps) {
               label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
               labelLine={false}
             >
-              {chartData.map((entry, index) => (
+              {chartData.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

@@ -5,9 +5,11 @@
 
 body {
   font-family: "Montserrat", sans-serif;
+  /* background-color: black;
+  color: white; */
 }
 .toaster-custom-width .toaster {
-  max-width: 100px !important; 
+  max-width: 100px !important;
 }
 
 @theme inline {
