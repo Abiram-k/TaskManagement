@@ -8,9 +8,7 @@ const ProtectLogin = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!token) {
-            toast.warning("Not token founded")
-
-      navigate("/auth/login"); 
+      navigate("/auth/login");
     }
   }, [token, navigate]);
 

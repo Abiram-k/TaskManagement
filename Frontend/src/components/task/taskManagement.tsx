@@ -45,7 +45,7 @@ export default function TaskManagement() {
     const socket = createSocket(token);
     socketRef.current = socket;
     socket.on("connect", () => {
-      toast.success("Real time updated enabled ");
+      toast.success(" Real time connection established ");
     });
     socket.on("task_updated", (task: Task[]) => {
       setTasks(task);

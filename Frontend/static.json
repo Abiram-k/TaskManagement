@@ -1,0 +1,6 @@
+{
+  "routes": {
+    "/auth/*": "/index.html",
+    "/*": "/index.html"
+  }
+}
