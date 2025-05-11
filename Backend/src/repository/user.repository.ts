@@ -1,6 +1,6 @@
-import { IUserRepository } from "../interface/repository/user.repository.interface";
-import { IRegister, IUser, Task, taskStatus } from "../types";
-import User from "../model/user.model";
+import { IUserRepository } from "../interface/repository/user.repository.interface.js";
+import { IRegister, IUser, Task, taskStatus } from "../types.js";
+import User from "../model/user.model.js";
 
 export class UserRepository implements IUserRepository<IUser> {
   async create(data: IRegister): Promise<void> {

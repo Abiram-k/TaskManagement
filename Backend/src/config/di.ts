@@ -1,14 +1,14 @@
-import { AuthController } from "../controller/auth.controller";
-import { TaskController } from "../controller/task.controller";
-import { IAuthController } from "../interface/controller/auth.controller.interface";
-import { ITaskController } from "../interface/controller/task.controller.interface";
-import { IUserRepository } from "../interface/repository/user.repository.interface";
-import { IAuthService } from "../interface/service/auth.service.interface";
-import { ITaskService } from "../interface/service/task.service.interface";
-import { UserRepository } from "../repository/user.repository";
-import { AuthService } from "../service/auth.service";
-import { TaskService } from "../service/task.service";
-import { IUser } from "../types";
+import { AuthController } from "../controller/auth.controller.js";
+import { TaskController } from "../controller/task.controller.js";
+import { IAuthController } from "../interface/controller/auth.controller.interface.js";
+import { ITaskController } from "../interface/controller/task.controller.interface.js";
+import { IUserRepository } from "../interface/repository/user.repository.interface.js";
+import { IAuthService } from "../interface/service/auth.service.interface.js";
+import { ITaskService } from "../interface/service/task.service.interface.js";
+import { UserRepository } from "../repository/user.repository.js";
+import { AuthService } from "../service/auth.service.js";
+import { TaskService } from "../service/task.service.js";
+import { IUser } from "../types.js";
 
 // Repository
 const userRepository: IUserRepository<IUser> = new UserRepository();

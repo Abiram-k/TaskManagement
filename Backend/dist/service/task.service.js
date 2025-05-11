@@ -1,5 +1,5 @@
-import { HttpStatusCode } from "../constants";
-import { getIO, getSocketIdByUserId } from "../utils/socket";
+import { HttpStatusCode } from "../constants.js";
+import { getIO, getSocketIdByUserId } from "../utils/socket.js";
 import createHttpError from "http-errors";
 export class TaskService {
     _userRepo;

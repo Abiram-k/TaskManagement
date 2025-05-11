@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { IAuthController } from "../interface/controller/auth.controller.interface";
-import { IAuthService } from "../interface/service/auth.service.interface";
-import { IRegister } from "../types";
-import { HttpStatusCode } from "../constants";
+import { IAuthController } from "../interface/controller/auth.controller.interface.js";
+import { IAuthService } from "../interface/service/auth.service.interface.js";
+import { IRegister } from "../types.js";
+import { HttpStatusCode } from "../constants.js";
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 

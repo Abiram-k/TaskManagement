@@ -10,7 +10,6 @@ import http from "http";
 import cookieParser from "cookie-parser";
 import { initSocket } from "./utils/socket.js";
 import "./utils/scheduleOverdueTask.js";
-
 config();
 const app = express();
 const server = http.createServer(app);

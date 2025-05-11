@@ -1,7 +1,7 @@
 import cron from "node-cron";
-import { IUserRepository } from "../interface/repository/user.repository.interface";
-import { UserRepository } from "../repository/user.repository";
-import { IUser } from "../types";
+import { IUserRepository } from "../interface/repository/user.repository.interface.js";
+import { UserRepository } from "../repository/user.repository.js";
+import { IUser } from "../types.js";
 
 const userRepository: IUserRepository<IUser> = new UserRepository();
 cron.schedule("0 0 * * *", async () => {

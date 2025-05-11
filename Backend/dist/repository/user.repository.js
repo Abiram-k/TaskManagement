@@ -1,4 +1,4 @@
-import User from "../model/user.model";
+import User from "../model/user.model.js";
 export class UserRepository {
     async create(data) {
         try {

@@ -1,8 +1,8 @@
-import { HttpStatusCode } from "../constants";
-import { ITaskService } from "../interface/service/task.service.interface";
-import { UserRepository } from "../repository/user.repository";
-import { getIO, getSocketIdByUserId } from "../utils/socket";
-import { Task, taskStatus } from "../types";
+import { HttpStatusCode } from "../constants.js";
+import { ITaskService } from "../interface/service/task.service.interface.js";
+import { UserRepository } from "../repository/user.repository.js";
+import { getIO, getSocketIdByUserId } from "../utils/socket.js";
+import { Task, taskStatus } from "../types.js";
 import createHttpError from "http-errors";
 
 export class TaskService implements ITaskService {

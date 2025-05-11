@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authController } from "../config/di";
+import { authController } from "../config/di.js";
 
 const router = Router();
 

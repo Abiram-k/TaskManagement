@@ -1,4 +1,4 @@
-import { IRegister, IUser, Task, taskStatus } from "../../types";
+import { IRegister, IUser, Task, taskStatus } from "../../types.js";
 
 export interface IUserRepository<T> {
   create(data: IRegister): Promise<void>;

@@ -1,12 +1,12 @@
-import { HttpStatusCode } from "../constants";
-import { IAuthService } from "../interface/service/auth.service.interface";
-import { UserRepository } from "../repository/user.repository";
+import { HttpStatusCode } from "../constants.js";
+import { IAuthService } from "../interface/service/auth.service.interface.js";
+import { UserRepository } from "../repository/user.repository.js";
 import createHttpError from "http-errors";
-import { ILogin, IRegister } from "../types";
-import { hashPassword } from "../utils/hashPassword";
-import { comparePassword } from "../utils/comparePassword";
-import { generateAccessToken } from "../utils/generateAccessToken";
-import { generateRefreshToken } from "../utils/generateRefreshToken";
+import { ILogin, IRegister } from "../types.js";
+import { hashPassword } from "../utils/hashPassword.js";
+import { comparePassword } from "../utils/comparePassword.js";
+import { generateAccessToken } from "../utils/generateAccessToken.js";
+import { generateRefreshToken } from "../utils/generateRefreshToken.js";
 
 export class AuthService implements IAuthService {
   private _userRepo: UserRepository;

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { HttpStatusCode } from "../constants";
+import { HttpStatusCode } from "../constants.js";
 export const authenticate = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {

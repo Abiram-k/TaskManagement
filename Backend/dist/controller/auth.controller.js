@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "../constants";
+import { HttpStatusCode } from "../constants.js";
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 export class AuthController {

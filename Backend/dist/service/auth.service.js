@@ -1,9 +1,9 @@
-import { HttpStatusCode } from "../constants";
+import { HttpStatusCode } from "../constants.js";
 import createHttpError from "http-errors";
-import { hashPassword } from "../utils/hashPassword";
-import { comparePassword } from "../utils/comparePassword";
-import { generateAccessToken } from "../utils/generateAccessToken";
-import { generateRefreshToken } from "../utils/generateRefreshToken";
+import { hashPassword } from "../utils/hashPassword.js";
+import { comparePassword } from "../utils/comparePassword.js";
+import { generateAccessToken } from "../utils/generateAccessToken.js";
+import { generateRefreshToken } from "../utils/generateRefreshToken.js";
 export class AuthService {
     _userRepo;
     constructor(userRepo) {

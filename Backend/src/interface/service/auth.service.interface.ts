@@ -1,4 +1,4 @@
-import { ILogin, IRegister } from "../../types";
+import { ILogin, IRegister } from "../../types.js";
 
 export interface IAuthService {
   login(data: ILogin): Promise<{ accessToken: string; refreshToken: string }>;

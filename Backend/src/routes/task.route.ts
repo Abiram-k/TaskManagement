@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { taskController } from "../config/di";
+import { taskController } from "../config/di.js";
 
 const router = Router();
 

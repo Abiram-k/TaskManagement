@@ -166,10 +166,10 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
+                          value={field.value}
+                          onChange={field.onChange}
+                          minDate={new Date()}
+                          selectRange={false}
                         />
                       </PopoverContent>
                     </Popover>

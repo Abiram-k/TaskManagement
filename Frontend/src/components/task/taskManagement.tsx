@@ -45,7 +45,7 @@ export default function TaskManagement() {
     const socket = createSocket(token);
     socketRef.current = socket;
     socket.on("connect", () => {
-      toast.success("User connected");
+      toast.success("Real time updated enabled ");
     });
     socket.on("task_updated", (task: Task[]) => {
       setTasks(task);
@@ -111,30 +111,33 @@ export default function TaskManagement() {
         updatingTask ||
         deletingTask ||
         statusUpdating) && <Spinner />}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
+      <div className=" sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="md:mb-5  mb-3">
           <h1 className="text-3xl font-bold tracking-tight">Task Management</h1>
           <p className="text-muted-foreground">
             Manage your tasks, track progress, and stay organized.
           </p>
         </div>
-        <Button
-          onClick={() => {
-            setIsAddingTask(true);
-            setEditingTask(null);
-          }}
-          className="flex bg-green-500 shadow-md text-white hover:bg-green-600 items-center gap-2"
-        >
-          <PlusCircle className="h-4 w-4" />
-          Add New Task
-        </Button>
-        <Button
-          onClick={handleLogout}
-          className="bg-red-500 shadow-md text-white hover:bg-red-600 flex items-center gap-2"
-        >
-          <LogOut className="h-4 w-4" />
-          Logout
-        </Button>
+        <div className="flex items-center justify-between w-full space-x-4">
+          <Button
+            onClick={() => {
+              setIsAddingTask(true);
+              setEditingTask(null);
+            }}
+            className="flex bg-green-500 shadow-md text-white hover:bg-green-600 items-center gap-2"
+          >
+            <PlusCircle className="h-4 w-4" />
+            Add New Task
+          </Button>
+
+          <Button
+            onClick={handleLogout}
+            className="bg-red-500 shadow-md text-white hover:bg-red-600 flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="md:inline hidden">Logout</span>
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">

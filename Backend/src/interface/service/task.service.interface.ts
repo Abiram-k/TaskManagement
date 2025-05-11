@@ -1,4 +1,4 @@
-import { Task, taskStatus } from "../../types";
+import { Task, taskStatus } from "../../types.js";
 
 export interface ITaskService {
   getSelectedTask(userId: string, taskId: string): Promise<Task | null>;

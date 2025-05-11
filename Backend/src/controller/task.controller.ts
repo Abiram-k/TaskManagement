@@ -1,9 +1,8 @@
-import { request, Response, NextFunction } from "express";
-import { ITaskController } from "../interface/controller/task.controller.interface";
-import { ITaskService } from "../interface/service/task.service.interface";
-import { HttpStatusCode } from "../constants";
-import { AuthRequest, Task, taskStatus } from "../types";
-import createHttpError from "http-errors";
+import { Response, NextFunction } from "express";
+import { ITaskController } from "../interface/controller/task.controller.interface.js";
+import { ITaskService } from "../interface/service/task.service.interface.js";
+import { HttpStatusCode } from "../constants.js";
+import { AuthRequest, Task, taskStatus } from "../types.js";
 
 export class TaskController implements ITaskController {
   private _taskService: ITaskService;
@@ -18,12 +17,15 @@ export class TaskController implements ITaskController {
   ): Promise<void> {
     try {
       const { userId } = req.user as { userId: string };
+
       const tasks: Task[] = await this._taskService.getAllTasks(userId);
+
       res.status(HttpStatusCode.OK).json({
         message: "Successfully fetched all tasks",
         success: true,
         tasks,
       });
+      
     } catch (error) {
       next(error);
     }

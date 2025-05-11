@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { UserRepository } from "../repository/user.repository";
+import { UserRepository } from "../repository/user.repository.js";
 const userRepository = new UserRepository();
 cron.schedule("0 0 * * *", async () => {
     try {
