@@ -10,12 +10,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { type loginSchemaType } from "@/validationSchema/LoginSchema";
+import {
+  loginSchema,
+  type loginSchemaType,
+} from "@/validationSchema/LoginSchema";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { Link } from "react-router-dom";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function LoginForm({
   className,
@@ -25,7 +29,9 @@ export function LoginForm({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<loginSchemaType>({});
+  } = useForm<loginSchemaType>({
+    resolver: zodResolver(loginSchema),
+  });
   const { mutate, isPending } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword(!showPassword);
